@@ -1,6 +1,8 @@
 import {getHotSingerListRequest, getSingerListRequest} from '../../../api/request'
 import {
   CHANGE_SINGER_LIST,
+  CHANGE_CATOGORY,
+  CHANGE_ALPHA,
   CHANGE_PAGE_COUNT,
   CHANGE_PULLUP_LOADING,
   CHANGE_PULLDOWN_LOADING,
@@ -9,6 +11,14 @@ import {
 import {fromJS} from 'immutable'
 // import { alphaTypes } from '../../../api/config';
 
+export const changeAlpha = (data) => ({
+  type: CHANGE_ALPHA,
+  data
+});
+export const changeCategory = (data) => ({
+  type: CHANGE_CATOGORY,
+  data
+});
 // 获取歌手列表
 const  changeSingerList = (data) => ({
   type: CHANGE_SINGER_LIST,
@@ -24,12 +34,12 @@ export const changeEnterLoading = (data) => ({
   type: CHANGE_ENTER_LOADING,
   data
 })
-// 上拉加载
+// 滑动最底部loading
 export const changePullUpLoading  = (data) => ({
   type: CHANGE_PULLUP_LOADING,
   data
 })
-// 下拉加载
+// 顶部下拉刷新
 export const changePullDownLoading  = (data) => ({
   type: CHANGE_PULLDOWN_LOADING,
   data
@@ -50,7 +60,7 @@ export const getHotSingerList = () => {
 // 加载更多热门歌手
 export const refreshMoreHotSingerList  = () => {
   return (dispatch, getState) => {
-    const pageCount = getState.getIn('singers', 'pageCount')
+    const pageCount = getState().getIn('singers', 'pageCount')
     const singerList = getState().getIn(['singers', 'singerList']).toJS()
     getHotSingerListRequest(pageCount).then(res => {
       const data = [...singerList, ...res.artists]

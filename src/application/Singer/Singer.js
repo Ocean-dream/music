@@ -13,6 +13,7 @@ import {
   changePullDownLoading, 
   refreshMoreHotSingerList 
 } from './store/actionCreators';
+import  LazyLoad, {forceCheck} from 'react-lazyload';
 import {connect} from 'react-redux'
 
 function Singer(props) {
@@ -36,23 +37,26 @@ function Singer(props) {
     updateDispatch(val, alpha);
   };
 
-  // const handlePullUp = () => {
-  //   pullUpRefreshDispatch(category, alpha, category === '', pageCount);
-  // };
+  const handlePullUp = () => {
+    pullUpRefreshDispatch(category, alpha, category === '', pageCount);
+  };
 
-  // const handlePullDown = () => {
-  //   pullDownRefreshDispatch(category, alpha);
-  // };
+  const handlePullDown = () => {
+    pullDownRefreshDispatch(category, alpha);
+  };
     // 渲染列表函数
     const renderSingerList = () => {
+      const list = singerList ? singerList.toJS(): [];
       return (
         <List>
           {
-            singerList.map((item, index) => {
+            list.map((item, index) => {
              return (
-              <ListItem key={index} >
+              <ListItem key={item.accountId+""+index} >
               <div className ="img_wrapper">
-              <img src={item.picUrl} width="100%" height="100%" alt="music"/>
+              {/* <LazyLoad placeholder="loading"> */}
+                    <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music"/>
+                  {/* </LazyLoad> */}
               </div>
               <span>{item.name}</span>
             </ListItem>
@@ -65,11 +69,13 @@ function Singer(props) {
     return (
       <div>
         <NavContainer>
-        <Horizen list={categoryTypes} title={'分类(默认热门)'} oldval={category} handleClick={handleUpdateCatetory()}></Horizen>
-        <Horizen list={alphaTypes} title={"首字母:"} oldval={alpha} handleClick={handleUpdateAlpha()}></Horizen>
+        <Horizen list={categoryTypes} title={'分类(默认热门)'} oldval={category} handleClick={(val) => handleUpdateCatetory(val)}></Horizen>
+        <Horizen list={alphaTypes} title={"首字母:"} oldval={alpha} handleClick={(val) => handleUpdateAlpha(val)}></Horizen>
       </NavContainer>
       <ListContainer>
-        <Scroll>
+        <Scroll
+          pullUp={ handlePullUp }
+          pullDown = { handlePullDown }>
             {renderSingerList()}
         </Scroll>
       </ListContainer>
