@@ -14,6 +14,7 @@ import {
   refreshMoreHotSingerList 
 } from './store/actionCreators';
 import  LazyLoad, {forceCheck} from 'react-lazyload';
+import Loading from './../../baseUI/loading/index'
 import {connect} from 'react-redux'
 
 function Singer(props) {
@@ -82,7 +83,13 @@ function Singer(props) {
       </div>
     )
 }
-
+/**
+ * 
+ * @param {state} state 
+ * @param {ownProps} ownProps 
+ * mapStateToProps 可接受两个参数  一个state 可使当前组件绑定到store中的state，ownProps表示当前组件中的props
+ * 此处  接受sstore中的state 对组件中的属性进行赋值
+ */
 const mapStateToProps = (state) => ({
   singerList: state.getIn(['singers', 'singerList']),
   enterLoading: state.getIn(['singers', 'enterLoading']),
@@ -90,6 +97,13 @@ const mapStateToProps = (state) => ({
   pullDownLoading: state.getIn(['singers', 'pullDownLoading']),
   pageCount: state.getIn(['singers', 'pageCount'])
 })
+/**
+ * 
+ * @param {dispatch} dispatch 
+ * @param {ownProps} ownProps 
+ * 用来派发action  用来将当前组件与store中的dispatch相关联
+ * 接受dispatch()方法并返回期望注入到展示组件的props中的回调方法，它可以是一个函数，也可以是一个对象
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     getHotSingerDispatch() {
